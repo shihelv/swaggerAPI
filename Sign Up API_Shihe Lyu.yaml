@@ -1,0 +1,140 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Sign Up API
+  description: This is the api used to sign up a new user.
+  version: "1.0.0"
+# the domain of the service
+host: api.uber.com
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /Sign Up:
+    get:
+      summary: users sign up a new account  
+      description: |
+        This fucntions is used for new users to create account, in the first vertion, we just need their email, password, and role. Roles could be company representative, employees, or administrator.
+        We need the user's first name and last name in there acount profile, and their company's name to group them by their company.
+        In the following versions we will make requirement of the password.
+      parameters:
+        - name: email
+          in: query
+          description: Email address of the user.
+          required: true
+          type: string
+          format: string
+          
+        - name: password
+          in: query
+          description: password of the user's account 
+          required: true
+          type: string  
+          format: string
+          
+        - name: role
+          in: query
+          description: role of the user
+          required: true
+          type: string  
+          format: string
+          
+        - name: first_name
+          in: query
+          description: first name of the user.
+          required: true
+          type: string
+          format: string
+        - name: last_name
+          in: query
+          description: last name of the user. 
+          required: true
+          type: string  
+          format: string
+        - name: company
+          in: query
+          description: user's company's name
+          required: true
+          type: string  
+          format: string
+      tags:
+        - user
+      responses:
+        200:
+          description: Authentication Token
+          schema:
+            type: string
+            items:
+              $ref: '#/definitions/Profile'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  
+definitions:
+  
+  Profile:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: First name of the user.
+      last_name:
+        type: string
+        description: Last name of the user.
+      email:
+        type: string
+        description: Email address of the user
+      password:
+        type: string
+        description: password URL of the  user.
+      role:
+        type: string
+        description: role of the user's account
+      company:
+        type: string
+        description: company of the user
+      Authentication Token:
+        type: string
+        description: Authentication Token of the user.
+  Activity:
+    type: object
+    properties:
+      uuid:
+        type: string
+        description: Unique identifier for the activity
+  Activities:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int32
+        description: Position in pagination.
+      limit:
+        type: integer
+        format: int32
+        description: Number of items to retrieve (100 max).
+      count:
+        type: integer
+        format: int32
+        description: Total number of items available.
+      history:
+        type: array
+        items:
+          $ref: '#/definitions/Activity'
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
